@@ -103,6 +103,58 @@ public class Student implements Serializable {
         return department;
     }
 
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setSnuId(String snuId) {
+        this.snuId = snuId;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setMobile(String mobile) {
+        this.mobile = mobile;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public void setDateOfBirth(Date dateOfBirth) {
+        this.dateOfBirth = dateOfBirth;
+    }
+
+    public void setGuardianName(String guardianName) {
+        this.guardianName = guardianName;
+    }
+
+    public void setYearOfJoining(int yearOfJoining) {
+        this.yearOfJoining = yearOfJoining;
+    }
+
+    public void setCourse(String course) {
+        this.course = course;
+    }
+
+    public void setMajor(String major) {
+        this.major = major;
+    }
+
+    public void setNetId(String netId) {
+        this.netId = netId;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public void setDepartment(Department department) {
+        this.department = department;
+    }
+
     public Student(Long id, String snuId, String name, String mobile, String address, Date dateOfBirth, String guardianName, int yearOfJoining, String course, String major, String netId, String password, Department department) {
         this.id = id;
         this.snuId = snuId;

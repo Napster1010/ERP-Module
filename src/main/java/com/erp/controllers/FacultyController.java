@@ -7,6 +7,7 @@ import com.erp.services.FacultyService;
 import com.sun.org.apache.bcel.internal.generic.LSTORE;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -57,13 +58,13 @@ public class FacultyController {
     }
 
     @RequestMapping(method = RequestMethod.PUT)
-    public Faculty updateFaculty(Faculty faculty){
+    public Faculty updateFaculty(@RequestBody  Faculty faculty){
         Faculty updatedFaculty = facultyService.updateFaculty(faculty);
         return updatedFaculty;
     }
 
     @RequestMapping(method = RequestMethod.DELETE)
-    public boolean deleteFaculty(Faculty faculty){
+    public boolean deleteFaculty(@RequestBody  Faculty faculty){
         boolean isDeleted = facultyService.deleteFaculty(faculty);
 
         if(isDeleted)
