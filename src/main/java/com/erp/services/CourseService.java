@@ -14,6 +14,9 @@ public class CourseService {
     @Autowired
     private CourseRepository courseRepository;
 
+    @Autowired
+    private DepartmentService departmentService;
+
     public Course addCourse(Course course){
         Course insertedCourse = courseRepository.save(course);
         return course;
@@ -29,7 +32,8 @@ public class CourseService {
         return course;
     }
 
-    public List<Course> getCourseByDepartmentId(Department department){
+    public List<Course> getCourseByDepartmentId(String departmentId){
+        Department department = departmentService.getDepartmentByDepartmentId(departmentId);
         List<Course> courses = courseRepository.findByDepartment(department);
         return courses;
     }
@@ -46,7 +50,11 @@ public class CourseService {
     }
 
     public Course updateCourse(Course course){
-        Course updatedCourse = courseRepository.save(course);
-        return updatedCourse;
+        if(courseRepository.existsById(course.getId())){
+            Course updatedCourse = courseRepository.save(course);
+            return updatedCourse;
+        }
+        else
+            return null;
     }
 }

@@ -41,8 +41,7 @@ public class CourseController {
 
     @RequestMapping(value = "/{departmentId}", method = RequestMethod.GET, params = "departmentId")
     public List<Course> getCourseByDepartmentId(@PathVariable(name = "departmentId") String departmentId){
-        Department department = departmentService.getDepartmentByDepartmentId(departmentId);
-        List<Course> courses = courseService.getCourseByDepartmentId(department);
+        List<Course> courses = courseService.getCourseByDepartmentId(departmentId);
         return courses;
     }
 

@@ -44,7 +44,11 @@ public class SchoolService {
     }
 
     public School updateSchool(School school) {
-        School updatedSchool = schoolRepository.save(school);
-        return updatedSchool;
+        if(schoolRepository.existsById(school.getId())){
+            School updatedSchool = schoolRepository.save(school);
+            return updatedSchool;
+        }
+        else
+            return null;
     }
 }

@@ -44,7 +44,11 @@ public class DepartmentService {
     }
 
     public Department updateDepartment(Department department) {
-        Department updatedDepartment = departmentRepository.save(department);
-        return updatedDepartment;
+        if(departmentRepository.existsById(department.getId())){
+            Department updatedDepartment = departmentRepository.save(department);
+            return updatedDepartment;
+        }
+        else
+            return null;
     }
 }
