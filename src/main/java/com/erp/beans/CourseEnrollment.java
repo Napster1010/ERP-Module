@@ -1,17 +1,19 @@
 package com.erp.beans;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 @Entity(name = "CourseEnrollment")
 @Table(name = "course_enrollment")
-public class CourseEnrollment {
+public class CourseEnrollment implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private int id;
+    private Long id;
 
-    @Column(name = "course")
+    @OneToOne
+    @JoinColumn(name = "course_code", referencedColumnName = "course_code")
     private Course course;
 
     @Column(name = "season")
@@ -23,10 +25,11 @@ public class CourseEnrollment {
     @Column(name = "location")
     private String location;
 
-    @Column(name = "faculty")
+    @OneToOne
+    @JoinColumn(name = "faculty_snu_id", referencedColumnName = "snu_id")
     private Faculty faculty;
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
@@ -50,7 +53,7 @@ public class CourseEnrollment {
         return faculty;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -74,7 +77,7 @@ public class CourseEnrollment {
         this.faculty = faculty;
     }
 
-    public CourseEnrollment(int id, Course course, String season, int year, String location, Faculty faculty) {
+    public CourseEnrollment(Long id, Course course, String season, int year, String location, Faculty faculty) {
         this.id = id;
         this.course = course;
         this.season = season;

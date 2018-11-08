@@ -1,29 +1,30 @@
 package com.erp.beans;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Date;
 
 @Entity(name = "StudentCourseEnrollment")
 @Table(name = "student_course_enrollment")
-public class StudentCourseEnrollment {
+public class StudentCourseEnrollment implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private int id;
+    private Long id;
 
     @OneToOne
-    @JoinColumn(name = "snuId")
+    @JoinColumn(name = "student_snu_id", referencedColumnName = "snu_id")
     private Student student;
 
     @OneToOne
-    @JoinColumn(name = "id")
+    @JoinColumn(name = "course_enrollment_id", referencedColumnName = "id")
     private CourseEnrollment courseEnrollment;
 
     @Temporal(value = TemporalType.TIMESTAMP)
     private Date timestamp;
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
@@ -39,7 +40,7 @@ public class StudentCourseEnrollment {
         return timestamp;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -55,7 +56,7 @@ public class StudentCourseEnrollment {
         this.timestamp = timestamp;
     }
 
-    public StudentCourseEnrollment(int id, Student student, CourseEnrollment courseEnrollment, Date timestamp) {
+    public StudentCourseEnrollment(Long id, Student student, CourseEnrollment courseEnrollment, Date timestamp) {
         this.id = id;
         this.student = student;
         this.courseEnrollment = courseEnrollment;

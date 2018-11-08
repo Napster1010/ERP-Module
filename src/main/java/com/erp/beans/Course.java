@@ -1,15 +1,16 @@
 package com.erp.beans;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 @Entity(name = "Course")
 @Table(name = "course")
-public class Course {
+public class Course implements Serializable{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private int id;
+    private Long id;
 
     @Column(name = "course_code")
     private String courseCode;
@@ -18,7 +19,7 @@ public class Course {
     private String courseName;
 
     @OneToOne
-    @JoinColumn(name = "departmentId")
+    @JoinColumn(name = "department_id", referencedColumnName = "department_id")
     private Department department;
 
     @Column(name = "credits")
@@ -27,7 +28,7 @@ public class Course {
     @Column(name = "duration")
     private int duration;
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
@@ -51,7 +52,7 @@ public class Course {
         return duration;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -75,7 +76,7 @@ public class Course {
         this.duration = duration;
     }
 
-    public Course(int id, String courseCode, String courseName, Department department, int credits, int duration) {
+    public Course(Long id, String courseCode, String courseName, Department department, int credits, int duration) {
         this.id = id;
         this.courseCode = courseCode;
         this.courseName = courseName;

@@ -1,15 +1,16 @@
 package com.erp.beans;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 @Entity(name = "School")
 @Table(name = "school")
-public class School {
+public class School implements Serializable {
 
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Long id;
 
     @Column(name = "school_id")
     private String schoolId;
@@ -17,7 +18,7 @@ public class School {
     @Column(name = "school_name")
     private String schoolName;
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -29,7 +30,7 @@ public class School {
         this.schoolName = schoolName;
     }
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
@@ -41,7 +42,7 @@ public class School {
         return schoolName;
     }
 
-    public School(int id, String schoolId, String schoolName) {
+    public School(Long id, String schoolId, String schoolName) {
         this.id = id;
         this.schoolId = schoolId;
         this.schoolName = schoolName;
