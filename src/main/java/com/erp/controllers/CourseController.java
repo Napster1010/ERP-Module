@@ -1,13 +1,7 @@
 package com.erp.controllers;
 
-import com.erp.beans.Course;
-import com.erp.beans.CourseEnrollment;
-import com.erp.beans.Department;
-import com.erp.beans.Faculty;
-import com.erp.services.CourseEnrollmentService;
-import com.erp.services.CourseService;
-import com.erp.services.DepartmentService;
-import com.erp.services.FacultyService;
+import com.erp.beans.*;
+import com.erp.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,7 +22,12 @@ public class CourseController {
     @Autowired
     private FacultyService facultyService;
 
-    @RequestMapping(value = "", method = RequestMethod.POST)
+    @Autowired
+    private CoursePrerequisiteService coursePrerequisiteService;
+
+    ///////////////////////////Course Methods//////////////////////////////////////////
+
+    @RequestMapping(method = RequestMethod.POST)
     public Course addCourse(String courseCode, String courseName, String departmentId, Integer credits, Integer duration){
         Department department = departmentService.getDepartmentByDepartmentId(departmentId);
         Course course = new Course();
@@ -37,20 +36,20 @@ public class CourseController {
         return insertedCourse;
     }
 
-    @RequestMapping(value = "", method = RequestMethod.GET)
+    @RequestMapping(method = RequestMethod.GET)
     public List<Course> getAllCourses(){
         List<Course> allCourses = courseService.getAllCourse();
         return allCourses;
     }
 
-    @RequestMapping(value = "/{courseCode}", method = RequestMethod.GET, params = "courseCode")
-    public Course getCourseByCourseCode(@PathVariable(name = "courseCode") String courseCode){
+    @RequestMapping(method = RequestMethod.GET, params = "courseCode")
+    public Course getCourseByCourseCode(String courseCode){
         Course course = courseService.getCourseByCourseCode(courseCode);
         return course;
     }
 
-    @RequestMapping(value = "/{departmentId}", method = RequestMethod.GET, params = "departmentId")
-    public List<Course> getCourseByDepartmentId(@PathVariable(name = "departmentId") String departmentId){
+    @RequestMapping(method = RequestMethod.GET, params = "departmentId")
+    public List<Course> getCourseByDepartmentId(String departmentId){
         List<Course> courses = courseService.getCourseByDepartmentId(departmentId);
         return courses;
     }
@@ -72,7 +71,7 @@ public class CourseController {
 
     ///////////////////////////Course Enrollment Methods//////////////////////////////////////////
 
-    @RequestMapping(value = "/course-enrollment", method = RequestMethod.POST)
+    @RequestMapping(value = "/enrollment", method = RequestMethod.POST)
     public CourseEnrollment addCourseEnrollment(String courseCode, String season, int year, String location, String facultySnuId){
         Course course = courseService.getCourseByCourseCode(courseCode);
         Faculty faculty = facultyService.getFacultyBySnuId(facultySnuId);
@@ -81,13 +80,13 @@ public class CourseController {
         return insertedCourseEnrollment;
     }
 
-    @RequestMapping(value = "/course-enrollment", method = RequestMethod.PUT)
+    @RequestMapping(value = "/enrollment", method = RequestMethod.PUT)
     public CourseEnrollment updateCourseEnrollment(@RequestBody CourseEnrollment courseEnrollment){
         CourseEnrollment updatedCourseEnrollment = courseEnrollmentService.updateCourseEnrollment(courseEnrollment);
         return updatedCourseEnrollment;
     }
 
-    @RequestMapping(value = "/course-enrollment", method = RequestMethod.DELETE)
+    @RequestMapping(value = "/enrollment", method = RequestMethod.DELETE)
     public boolean deleteCourseEnrollment(@RequestBody CourseEnrollment courseEnrollment){
         boolean isDeleted = courseEnrollmentService.deleteCourseEnrollment(courseEnrollment);
 
@@ -97,33 +96,66 @@ public class CourseController {
             return false;
     }
 
-    @RequestMapping(value = "/course-enrollment", method = RequestMethod.GET)
+    @RequestMapping(value = "/enrollment", method = RequestMethod.GET)
     public List<CourseEnrollment> getAllCourseEnrollments(){
         List<CourseEnrollment> courseEnrollments = courseEnrollmentService.getAllCourseEnrollments();
         return courseEnrollments;
     }
 
-    @RequestMapping(value = "/course-enrollment", method = RequestMethod.GET, params = {"season", "year"})
+    @RequestMapping(value = "/enrollment", method = RequestMethod.GET, params = {"season", "year"})
     public List<CourseEnrollment> getCourseEnrollmentsBySeasonAndYear(String season, int year){
         List<CourseEnrollment> courseEnrollments = courseEnrollmentService.getCourseEnrollmentsBySeasonAndYear(season, year);
         return  courseEnrollments;
     }
 
-    @RequestMapping(value = "/course-enrollment", method = RequestMethod.GET, params = "snuId")
+    @RequestMapping(value = "/enrollment", method = RequestMethod.GET, params = "snuId")
     public List<CourseEnrollment> getCourseEnrollmentsByFacultySnuId(String snuId){
         List<CourseEnrollment> courseEnrollments = courseEnrollmentService.getCourseEnrollmentsByFacultySnuId(snuId);
         return courseEnrollments;
     }
 
-    @RequestMapping(value = "/course-enrollment", method = RequestMethod.GET, params = {"season", "year", "snuId"})
+    @RequestMapping(value = "/enrollment", method = RequestMethod.GET, params = {"season", "year", "snuId"})
     public List<CourseEnrollment> getCourseEnrollmentsBySeasonAndYearAndFacultySnuId(String season, int year, String snuId){
         List<CourseEnrollment> courseEnrollments = courseEnrollmentService.getCourseEnrollmentsBySeasonAndYearAndFacultySnuId(season, year, snuId);
         return courseEnrollments;
     }
 
-    @RequestMapping(value = "/course-enrollment", method = RequestMethod.GET, params = {"courseCode", "season", "year"})
+    @RequestMapping(value = "/enrollment", method = RequestMethod.GET, params = {"courseCode", "season", "year"})
     public CourseEnrollment getCourseEnrollmentByCourseCodeAndSeasonAndYear(String courseCode, String season, int year){
         CourseEnrollment courseEnrollment = courseEnrollmentService.getCourseEnrollmentByCourseCodeAndSeasonAndYear(courseCode, season, year);
         return courseEnrollment;
+    }
+
+    ///////////////////////////Course Prerequisite Methods//////////////////////////////////////////
+
+    @RequestMapping(value = "/prerequisite", method = RequestMethod.POST)
+    public CoursePrerequisite addCoursePrerequisite(String courseCode, String prerequisiteCourseCode){
+        Course course = courseService.getCourseByCourseCode(courseCode);
+        Course prerequisiteCourse = courseService.getCourseByCourseCode(prerequisiteCourseCode);
+        CoursePrerequisite coursePrerequisite = new CoursePrerequisite(null, course, prerequisiteCourse);
+        CoursePrerequisite insertedCoursePrerequisite = coursePrerequisiteService.addCoursePrerequisite(coursePrerequisite);
+        return insertedCoursePrerequisite;
+    }
+
+    @RequestMapping(value = "/prerequisite", method = RequestMethod.PUT)
+    public CoursePrerequisite updateCoursePrerequisite(@RequestBody CoursePrerequisite coursePrerequisite){
+        CoursePrerequisite updatedCoursePrerequisite = coursePrerequisiteService.updateCoursePrerequisite(coursePrerequisite);
+        return updatedCoursePrerequisite;
+    }
+
+    @RequestMapping(value = "/prerequisite", method = RequestMethod.DELETE)
+    public boolean deleteCoursePrerequisite(@RequestBody CoursePrerequisite coursePrerequisite){
+        boolean isDeleted = coursePrerequisiteService.deleteCoursePrerequisite(coursePrerequisite);
+
+        if(isDeleted)
+            return true;
+        else
+            return false;
+    }
+
+    @RequestMapping(value = "/prerequisite", method = RequestMethod.GET, params = "courseCode")
+    public List<CoursePrerequisite> getCoursePrerequisiteByCourseCode(String courseCode){
+        List<CoursePrerequisite> coursePrerequisites = coursePrerequisiteService.getCoursePrerequisiteByCourseCode(courseCode);
+        return coursePrerequisites;
     }
 }
