@@ -5,6 +5,7 @@ import com.erp.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -25,6 +26,11 @@ public class CourseController {
     @Autowired
     private CoursePrerequisiteService coursePrerequisiteService;
 
+    @Autowired
+    private ReviewService reviewService;
+
+    @Autowired
+    private StudentCourseEnrollmentService studentCourseEnrollmentService;
     ///////////////////////////Course Methods//////////////////////////////////////////
 
     @RequestMapping(method = RequestMethod.POST)
@@ -157,5 +163,37 @@ public class CourseController {
     public List<CoursePrerequisite> getCoursePrerequisiteByCourseCode(String courseCode){
         List<CoursePrerequisite> coursePrerequisites = coursePrerequisiteService.getCoursePrerequisiteByCourseCode(courseCode);
         return coursePrerequisites;
+    }
+
+    ///////////////////////////Course Review Methods//////////////////////////////////////////
+
+    @RequestMapping(value = "/review", method = RequestMethod.POST)
+    public Review addReview(String review, int rating, Long studentCourseEnrollmentId){
+        StudentCourseEnrollment studentCourseEnrollment = studentCourseEnrollmentService.getStudentCourseEnrollmentById(studentCourseEnrollmentId);
+        Review reviewObj = new Review(null, review, rating, studentCourseEnrollment, new Date());
+        Review insertedReview = reviewService.addReview(reviewObj);
+        return insertedReview;
+    }
+
+    @RequestMapping(value = "/review", method = RequestMethod.PUT)
+    public Review updateReview(@RequestBody Review review) {
+        Review updatedReview = reviewService.updateReview(review);
+        return updatedReview;
+    }
+
+    @RequestMapping(value = "/review", method = RequestMethod.DELETE)
+    public boolean deleteReview(@RequestBody Review review) {
+        boolean isDeleted = reviewService.deleteReview(review);
+
+        if(isDeleted)
+            return true;
+        else
+            return false;
+    }
+
+    @RequestMapping(value = "/review", method = RequestMethod.GET, params = "studentCourseEnrollmentId")
+    public Review getByStudentCourseEnrollmentId(Long studentCourseEnrollmentId){
+        Review review = reviewService.getByStudentCourseEnrollmentId(studentCourseEnrollmentId);
+        return review;
     }
 }

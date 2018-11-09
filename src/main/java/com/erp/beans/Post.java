@@ -18,7 +18,7 @@ public class Post implements Serializable {
 
     @OneToOne
     @JoinColumn(name = "student_discussion_forum_mapping_id", referencedColumnName = "id")
-    private StudentDiscussionForumMapping student;
+    private StudentDiscussionForumMapping studentDiscussionForumMapping;
 
     @Temporal(value = TemporalType.TIMESTAMP)
     private Date timestamp;
@@ -32,7 +32,7 @@ public class Post implements Serializable {
     }
 
     public StudentDiscussionForumMapping getStudent() {
-        return student;
+        return studentDiscussionForumMapping;
     }
 
     public Date getTimestamp() {
@@ -48,17 +48,17 @@ public class Post implements Serializable {
     }
 
     public void setStudent(StudentDiscussionForumMapping student) {
-        this.student = student;
+        this.studentDiscussionForumMapping = student;
     }
 
     public void setTimestamp(Date timestamp) {
         this.timestamp = timestamp;
     }
 
-    public Post(Long id, String message, StudentDiscussionForumMapping student, Date timestamp) {
+    public Post(Long id, String message, StudentDiscussionForumMapping studentDiscussionForumMapping, Date timestamp) {
         this.id = id;
         this.message = message;
-        this.student = student;
+        this.studentDiscussionForumMapping = studentDiscussionForumMapping;
         this.timestamp = timestamp;
     }
 
@@ -70,7 +70,7 @@ public class Post implements Serializable {
         return "Post{" +
                 "id=" + id +
                 ", message='" + message + '\'' +
-                ", student=" + student +
+                ", student=" + studentDiscussionForumMapping +
                 ", timestamp=" + timestamp +
                 '}';
     }

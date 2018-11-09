@@ -1,13 +1,7 @@
 package com.erp.controllers;
 
-import com.erp.beans.CourseEnrollment;
-import com.erp.beans.Department;
-import com.erp.beans.Student;
-import com.erp.beans.StudentCourseEnrollment;
-import com.erp.services.CourseEnrollmentService;
-import com.erp.services.DepartmentService;
-import com.erp.services.StudentCourseEnrollmentService;
-import com.erp.services.StudentService;
+import com.erp.beans.*;
+import com.erp.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -32,6 +26,9 @@ public class StudentController {
 
     @Autowired
     private StudentCourseEnrollmentService studentCourseEnrollmentService;
+
+    @Autowired
+    private StudentGradeService studentGradeService;
 
     ///////////////////////////Student Methods//////////////////////////////////////////
 
@@ -122,5 +119,27 @@ public class StudentController {
     public List<StudentCourseEnrollment> getStudentCourseEnrollmentBySnuId(String snuId){
         List<StudentCourseEnrollment> studentCourseEnrollments = studentCourseEnrollmentService.getStudentCourseEnrollmentBySnuId(snuId);
         return studentCourseEnrollments;
+    }
+
+    ///////////////////////////Student course enrollment Methods//////////////////////////////////////////
+
+    @RequestMapping(value = "/grade", method = RequestMethod.POST)
+    public StudentGrade addStudentGrade(Long studentCourseEnrollmentId, String grade){
+        StudentCourseEnrollment studentCourseEnrollment = studentCourseEnrollmentService.getStudentCourseEnrollmentById(studentCourseEnrollmentId);
+        StudentGrade studentGrade = new StudentGrade(null, studentCourseEnrollment, grade);
+        StudentGrade insertedStudentGrade = studentGradeService.addStudentGrade(studentGrade);
+        return insertedStudentGrade;
+    }
+
+    @RequestMapping(value = "/grade", method = RequestMethod.GET, params = "studentCourseEnrollmentId")
+    public StudentGrade getStudentGradeByStudentCourseEnrollmentId(Long studentCourseEnrollmentId) {
+        StudentGrade studentGrade = studentGradeService.getStudentGradeByStudentCourseEnrollmentId(studentCourseEnrollmentId);
+        return studentGrade;
+    }
+
+    @RequestMapping(value = "/grade", method = RequestMethod.PUT)
+    public StudentGrade updateStudentGrade(@RequestBody StudentGrade studentGrade){
+        StudentGrade updatedStudentGrade = studentGradeService.updateStudentGrade(studentGrade);
+        return updatedStudentGrade;
     }
 }
