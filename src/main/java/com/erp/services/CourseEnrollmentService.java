@@ -7,6 +7,7 @@ import com.erp.repositories.CourseEnrollmentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityManager;
 import java.util.List;
 
 @Service
@@ -70,6 +71,11 @@ public class CourseEnrollmentService {
     public CourseEnrollment getCourseEnrollmentByCourseCodeAndSeasonAndYear(String courseCode, String season, int year){
         Course course = courseService.getCourseByCourseCode(courseCode);
         CourseEnrollment courseEnrollment = courseEnrollmentRepository.findByCourseAndSeasonAndYear(course, season, year);
+        return courseEnrollment;
+    }
+
+    public CourseEnrollment getCourseEnrollmentById(Long id){
+        CourseEnrollment courseEnrollment = courseEnrollmentRepository.findById(id).get();
         return courseEnrollment;
     }
 }

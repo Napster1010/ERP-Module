@@ -4,7 +4,7 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
 
-@Entity(name = "StudentCourseEnrollment")
+@Entity(name = "StudentCourseEnrollmentService")
 @Table(name = "student_course_enrollment")
 public class StudentCourseEnrollment implements Serializable {
 
@@ -68,7 +68,7 @@ public class StudentCourseEnrollment implements Serializable {
 
     @Override
     public String toString() {
-        return "StudentCourseEnrollment{" +
+        return "StudentCourseEnrollmentService{" +
                 "id=" + id +
                 ", student=" + student +
                 ", courseEnrollment=" + courseEnrollment +

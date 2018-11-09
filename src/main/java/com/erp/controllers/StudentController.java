@@ -1,8 +1,12 @@
 package com.erp.controllers;
 
+import com.erp.beans.CourseEnrollment;
 import com.erp.beans.Department;
 import com.erp.beans.Student;
+import com.erp.beans.StudentCourseEnrollment;
+import com.erp.services.CourseEnrollmentService;
 import com.erp.services.DepartmentService;
+import com.erp.services.StudentCourseEnrollmentService;
 import com.erp.services.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -22,6 +26,14 @@ public class StudentController {
 
     @Autowired
     private DepartmentService departmentService;
+
+    @Autowired
+    private CourseEnrollmentService courseEnrollmentService;
+
+    @Autowired
+    private StudentCourseEnrollmentService studentCourseEnrollmentService;
+
+    ///////////////////////////Student Methods//////////////////////////////////////////
 
     @RequestMapping(method = RequestMethod.POST)
     public Student addStudent(String snuId, String name, String mobile, String address, @DateTimeFormat(pattern = "dd-MM-yyyy") Date dateOfBirth, String guardianName, Integer yearOfJoining, String course, String major, String netId, String password, String departmentId){
@@ -80,5 +92,35 @@ public class StudentController {
             return true;
         else
             return false;
+    }
+
+    ///////////////////////////Student course enrollment Methods//////////////////////////////////////////
+
+    @RequestMapping(value = "/course-enrollment", method = RequestMethod.POST)
+    public StudentCourseEnrollment addStudentCourseEnrollment(String snuId, Long courseEnrollmentId){
+        Student student = studentService.getStudentBySnuId(snuId);
+        CourseEnrollment courseEnrollment = courseEnrollmentService.getCourseEnrollmentById(courseEnrollmentId);
+
+        StudentCourseEnrollment studentCourseEnrollment = new StudentCourseEnrollment();
+        studentCourseEnrollment.setStudent(student); studentCourseEnrollment.setCourseEnrollment(courseEnrollment); studentCourseEnrollment.setTimestamp(new Date());
+
+        StudentCourseEnrollment insertedStudentCourseEnrollment = studentCourseEnrollmentService.addStudentCourseEnrollment(studentCourseEnrollment);
+        return insertedStudentCourseEnrollment;
+    }
+
+    @RequestMapping(value = "/course-enrollment", method = RequestMethod.DELETE)
+    public boolean deleteStudentCourseEnrollment(@RequestBody StudentCourseEnrollment studentCourseEnrollment){
+        boolean isDeleted = studentCourseEnrollmentService.deleteStudentCourseEnrollment(studentCourseEnrollment);
+
+        if(isDeleted)
+            return true;
+        else
+            return false;
+    }
+
+    @RequestMapping(value = "/course-enrollment", method = RequestMethod.GET, params = "snuId")
+    public List<StudentCourseEnrollment> getStudentCourseEnrollmentBySnuId(String snuId){
+        List<StudentCourseEnrollment> studentCourseEnrollments = studentCourseEnrollmentService.getStudentCourseEnrollmentBySnuId(snuId);
+        return studentCourseEnrollments;
     }
 }
